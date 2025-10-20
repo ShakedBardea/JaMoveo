@@ -26,15 +26,19 @@ cd backend
 npm install
 ```
 
-Create a `.env` file based on `.env.example`:
+**Create environment file:**
+
+**Option A:** Copy the example file
 ```bash
 cp .env.example .env
 ```
 
+**Option B:** Rename `.env.example` to `.env` manually
+
 Then edit `.env` and replace the placeholders with your actual values:
 - `MONGODB_URI` - Your MongoDB Atlas connection string
 - `ADMIN_REG_CODE` - Your chosen admin registration code
-  
+
 ### 3. Frontend Setup
 ```bash
 cd frontend
@@ -61,6 +65,3 @@ The application will open at `http://localhost:3000`
 
 Shaked Bardea
 
-## 📝 License
-
-ISC
