@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-// Define the Song type structure
 export type Song = {
     rawText: string;
     title: string;
@@ -24,9 +23,8 @@ type SongProviderProps = {
 };
 
 /**
- * SongProvider - Global state management for current song
- * This context stores the currently selected song that is shared across
- * admin and player views. Socket event handling is done at the component level.
+ * Global state provider for the currently selected song
+ * Shared between admin and player components
  */
 export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
   const [currentSong, setCurrentSong] = useState<Song>(null);
@@ -39,9 +37,8 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 };
 
 /**
- * useSong - Custom hook to access song context
- * @returns Current song state and setter function
- * @throws Error if used outside of SongProvider
+ * Hook to access the current song context
+ * Must be used within SongProvider
  */
 export const useSong = () => {
   const context = useContext(SongContext);

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import { socket } from './services/socketService';
 import { SongProvider } from './context/SongContext';
 
 // Pages
@@ -14,7 +13,6 @@ import AdminLivePage from './components/AdminLivePage';
 import PlayerMainPage from './components/PlayerMainPage';
 import PlayerLivePage from './components/PlayerLivePage';
 
-// טיפוס משתמש
 export type UserType = {
   id: string;
   username: string;
@@ -22,10 +20,7 @@ export type UserType = {
 };
 
 function App() {
-  // Socket connection is now handled by individual components
-  // when they need to connect with user authentication
-  
-  // בודק אם המשתמש שמור בלוקאל סטורג'
+  // Retrieve user from localStorage
   const getUser = () => {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
@@ -33,38 +28,37 @@ function App() {
 
   const isLoggedIn = () => !!getUser();
 
-  // רכיב שמגן על מסכים פרטיים
+  // Protected route wrapper - restricts access based on authentication and role
   const PrivateRoute = ({ element, onlyAdmin = false }: { element: React.ReactElement; onlyAdmin?: boolean }) => {
     const user = getUser();
     if (!user) return <Navigate to="/login" replace />;
     if (onlyAdmin && !user.isAdmin) return <Navigate to="/player" replace />;
     return element;
   };
-  
 
   return (
     <SongProvider>
       <Router>
         <div className="App">
           <Routes>
-            {/* ברירת מחדל */}
+            {/* Default redirect */}
             <Route path="/" element={<Navigate to="/login" replace />} />
 
-            {/* עמודי הרשמה והתחברות */}
+            {/* Public routes - Authentication */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user-signup" element={<UserRegisterPage />} />
             <Route path="/admin-signup" element={<AdminRegisterPage />} />
 
-            {/* עמודים למנהלים בלבד */}
+            {/* Admin-only routes */}
             <Route path="/admin" element={<PrivateRoute element={<AdminSearchPage />} onlyAdmin />} />
             <Route path="/admin/results" element={<PrivateRoute element={<AdminResultsPage />} onlyAdmin />} />
             <Route path="/admin/live" element={<PrivateRoute element={<AdminLivePage />} onlyAdmin />} />
 
-            {/* עמודים לנגנים */}
+            {/* Player routes */}
             <Route path="/player" element={<PrivateRoute element={<PlayerMainPage />} />} />
             <Route path="/player/live" element={<PrivateRoute element={<PlayerLivePage />} />} />
 
-            {/* ברירת מחדל לשגיאה */}
+            {/* Fallback for undefined routes */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>

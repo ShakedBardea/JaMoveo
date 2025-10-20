@@ -69,6 +69,6 @@ export async function loginController(req: Request, res: Response) {
 
         return res.status(200).json({ user: { id: user._id, username: user.username, instrument: user.instrument, isAdmin: user.isAdmin } });
     } catch (err: any) {
-        return res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: 'Invalid credentials' });
     }
 }

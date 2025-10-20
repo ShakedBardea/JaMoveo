@@ -29,7 +29,7 @@ const AdminResultsPage: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // ניתוק סוקט והסרה של המשתמש מהלוקאל סטורג
+    // Disconnect socket and remove user from localStorage
     socket.disconnect();
     localStorage.removeItem('user');
     navigate('/login');

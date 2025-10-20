@@ -4,7 +4,6 @@ import axios from 'axios';
 import { socket } from '../services/socketService';
 import '../styles/AdminSearchPage.css';
 
-
 interface SearchResult {
   title: string;
   artist: string;
@@ -19,7 +18,6 @@ const AdminSearchPage: React.FC = () => {
   const [error, setError] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
 
-
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -28,7 +26,7 @@ const AdminSearchPage: React.FC = () => {
     setError('');
 
     try {
-      // קבלת המשתמש מהלוקאל סטורג במקום JWT
+      // Retrieve user data from localStorage 
       const userData = localStorage.getItem('user');
       if (!userData) throw new Error('User not logged in');
  
@@ -53,7 +51,7 @@ const AdminSearchPage: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // ניתוק סוקט והסרת המשתמש מהלוקאל סטורג
+    // Disconnect socket and remove user from localStorage
     localStorage.removeItem('user');
     socket.disconnect();
     navigate('/login');

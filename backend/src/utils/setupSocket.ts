@@ -72,7 +72,6 @@ export const setupSocket = (server: HTTPServer): void => {
     socket.on('disconnect', () => {
       console.log('[Socket] Client disconnected:', socket.id);
       
-      // If admin disconnects, notify all players to stop
       if (isAdmin) {
         console.log('[Socket] Admin disconnected - broadcasting quit_song to all players');
         

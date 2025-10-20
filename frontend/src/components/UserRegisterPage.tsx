@@ -37,7 +37,6 @@ const UserRegisterPage: React.FC = () => {
     setSuccess('');
     setLoading(true);
 
-    // Client-side validation for nicer UX
     if (!formData.username.trim()) {
       setLoading(false);
       setError('Username is required');
@@ -49,7 +48,7 @@ const UserRegisterPage: React.FC = () => {
       return;
     }
 
-    // ניתוק סוקט במידה ויש חיבור קודם
+    // Disconnect any existing socket connection
     socket.disconnect();
 
     try {
@@ -57,10 +56,9 @@ const UserRegisterPage: React.FC = () => {
       const data = response.data;
 
       if (data.user) {
-        // שמירת המשתמש בלוקאל סטורג
+        // Store user in localStorage and establish socket connection
         localStorage.setItem('user', JSON.stringify(data.user));
 
-        // חיבור לסוקט
         socket.connect();
         socket.emit('user_login', {
           userId: data.user.id,
@@ -77,6 +75,7 @@ const UserRegisterPage: React.FC = () => {
       console.error('Registration error:', err);
       const status = err?.response?.status;
       const message: string | undefined = err?.response?.data?.message;
+      
       if (status === 409) {
         setError('Username already taken');
       } else if (status === 400) {

@@ -10,7 +10,6 @@ import { setupSocket } from './utils/setupSocket';
 
 
 
-
 const app = express();
 const server = http.createServer(app);
 
@@ -25,8 +24,8 @@ if (!MONGO_URI) {
 app.use(cors({
     origin: '*',
 }));
-app.use(express.json());
 
+app.use(express.json());
 app.use('/api', authRoutes);
 app.use('/api/songs', songRoutes);
 

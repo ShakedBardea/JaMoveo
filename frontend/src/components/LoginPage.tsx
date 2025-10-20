@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { socket, connectWithAuth, disconnectSocket } from '../services/socketService';
+import { socket } from '../services/socketService';
 import '../styles/LoginPage.css';
 
 const LoginPage: React.FC = () => {
@@ -11,15 +11,16 @@ const LoginPage: React.FC = () => {
     username: '',
     password: '',
   });
-  // error text is kept in `message`
   const [loading] = useState(false);
   const [message, setMessage] = useState('');
 
-
-   useEffect(() => {
-    try { socket.disconnect(); } catch {}
+  // Clean up any existing socket connections and stored auth data on component mount
+  useEffect(() => {
+    try { 
+      socket.disconnect(); 
+    } catch {}
     localStorage.removeItem('user');
-    localStorage.removeItem('token'); // רק אם שמור אצלך מאתמול
+    localStorage.removeItem('token'); // Remove legacy token if exists
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +30,7 @@ const LoginPage: React.FC = () => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setMessage(''); // מאפסים הודעה קודמת
+    setMessage(''); // Clear previous error messages
   
     try {
       const res = await fetch(`${apiUrl}/api/login`, {
@@ -40,20 +41,20 @@ const LoginPage: React.FC = () => {
       const data = await res.json();
   
       if (!res.ok || !data.user) {
-        setMessage(data.message || 'Login failed');
+        setMessage('Login failed');
         return;
       }
   
-      // שמירה בלוקאל סטורג'
+      // Store user data in localStorage for persistence
       const user = {
         id: data.user.id,
         username: data.user.username,
         instrument: data.user.instrument,
-        isAdmin: !!data.user.isAdmin ,
+        isAdmin: !!data.user.isAdmin,
       };
       localStorage.setItem('user', JSON.stringify(user));
   
-      // הצמדת auth לסוקט
+      // Attach authentication data to socket
       socket.auth = {
         userId: user.id,
         username: user.username,
@@ -61,16 +62,17 @@ const LoginPage: React.FC = () => {
         isAdmin: user.isAdmin,
       };
   
-      // חיבור ושליחת user_login פעם אחת
+      // Connect socket and emit user_login event once connection is established
       socket.connect();
       socket.once('connect', () => {
         socket.emit('user_login', user);
       });
   
+      // Navigate to appropriate page based on user role
       navigate(user.isAdmin ? '/admin' : '/player');
     } catch (err) {
       console.error(err);
-      setMessage('Server error'); // שימוש רגיל ב-useState
+      setMessage('Server error');
     }
   }
 

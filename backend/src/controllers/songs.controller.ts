@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { searchSongsTab4U, getSongContentFromTab4U } from '../utils/scrapeTab4U';
 
+// ----------------- SEARCH SONGS -----------------
 export async function searchSongs(req: Request, res: Response) {
   const query = req.query.query as string;
   if (!query) return void res.status(400).json({ error: 'Missing query parameter' });
@@ -13,6 +14,7 @@ export async function searchSongs(req: Request, res: Response) {
   }
 }
 
+// ----------------- GET SONG CONTENT -----------------
 export async function getSongContent(req: Request, res: Response) {
   const link = req.query.link as string;
   if (!link) return void res.status(400).json({ error: 'Missing link parameter' });

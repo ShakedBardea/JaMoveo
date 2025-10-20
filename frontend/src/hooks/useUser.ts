@@ -1,3 +1,4 @@
+// Retrieve and parse user data from localStorage
 export const useUser = () => {
     const userData = localStorage.getItem('user');
 

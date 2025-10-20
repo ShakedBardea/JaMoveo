@@ -45,7 +45,7 @@ const AdminRegisterPage: React.FC = () => {
       return;
     }
 
-    // ניתוק סוקט במידה ויש חיבור קודם
+    // Disconnect existing socket connection if any
     socket.disconnect();
 
     try {
@@ -53,10 +53,10 @@ const AdminRegisterPage: React.FC = () => {
       const data = response.data;
 
       if (data.user) {
-        // שמירת המשתמש בלוקאל סטורג
+        // Store user data in localStorage
         localStorage.setItem('user', JSON.stringify(data.user));
 
-        // חיבור לסוקט
+        // Establish socket connection
         socket.connect();
         socket.emit('user_login', {
           userId: data.user.id,
@@ -73,7 +73,7 @@ const AdminRegisterPage: React.FC = () => {
       const status = err?.response?.status;
       const message: string | undefined = err?.response?.data?.message;
       if (status === 409) {
-        // כבר קיים אדמין במערכת או שם משתמש תפוס
+        // Admin already exists in the system or username is taken
         setError(message || 'Admin already exists or username taken');
       } else if (status === 403) {
         setError('Invalid admin code');
