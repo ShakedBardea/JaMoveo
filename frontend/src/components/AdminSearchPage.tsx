@@ -4,6 +4,7 @@ import axios from 'axios';
 import { socket } from '../services/socketService';
 import '../styles/AdminSearchPage.css';
 
+
 interface SearchResult {
   title: string;
   artist: string;
@@ -16,6 +17,8 @@ const AdminSearchPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +31,8 @@ const AdminSearchPage: React.FC = () => {
       // קבלת המשתמש מהלוקאל סטורג במקום JWT
       const userData = localStorage.getItem('user');
       if (!userData) throw new Error('User not logged in');
-
-      const response = await axios.get(`http://localhost:3001/api/songs/search-songs?query=${encodeURIComponent(searchQuery)}`);
+ 
+      const response = await axios.get(`${apiUrl}/api/songs/search-songs?query=${encodeURIComponent(searchQuery)}`);
 
       if (response.data && response.data.length > 0) {
         navigate('/admin/results', { 
