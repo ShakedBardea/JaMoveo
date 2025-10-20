@@ -78,7 +78,10 @@ const AdminLivePage: React.FC = () => {
     socket.on('quit_song', handleQuitSong);
     socket.on('song_error', handleSongError);
 
-    setLoading(false);
+    // Only set loading to false if we already have a song (not waiting for server response)
+    if (currentSong) {
+      setLoading(false);
+    }
 
     // Cleanup function to prevent memory leaks
     return () => {
@@ -116,7 +119,23 @@ const AdminLivePage: React.FC = () => {
   };
 
   // Loading and error states
-  if (loading) return <p>Loading song...</p>;
+  if (loading) return (
+    <div className="admin-live-page">
+      <div className="admin-header">
+        <div className="header-left">
+          <h1>🎵 JaMoveo Live</h1>
+        </div>
+      </div>
+      <div className="live-content">
+        <div style={{ textAlign: 'center', padding: '2rem', fontSize: '1.2rem' }}>
+          <p>Loading song content...</p>
+          <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '1rem' }}>
+            Fetching lyrics and chords from Tab4U
+          </p>
+        </div>
+      </div>
+    </div>
+  );
   if (error) return <p>Error: {error}</p>;
   if (!currentSong) return <p>No song selected</p>;
   
