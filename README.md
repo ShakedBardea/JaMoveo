@@ -61,11 +61,22 @@ npm start
 
 The application will open at `http://localhost:3000`
 
-**Note:**
-The application uses **localStorage** to manage session data.
-If you wish to test multiple users simultaneously (e.g., admin and regular user), make sure to open two separate browser windows or use different browsers.
-Running both users in tabs of the same window will cause them to share the same session and behave as one user.
+---
 
+### 🔐 Admin Registration
+
+To register as an administrator, enter the following code in the **Admin Code** field of the registration form:
+`!MovEo-Adm1n-2025!$XyZ`
+
+This code is required only once during the admin registration process.
+
+---
+
+### ⚙️ Additional Notes
+
+The application uses **localStorage** to manage session data.  
+To test multiple users simultaneously (e.g., admin and regular user), open **two separate browser windows** or use **different browsers**.  
+Running both users in tabs of the same window will cause them to share the same session and behave as one user.
 ## 👥 Author
 
 Shaked Bardea
