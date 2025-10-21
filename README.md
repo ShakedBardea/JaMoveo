@@ -61,6 +61,11 @@ npm start
 
 The application will open at `http://localhost:3000`
 
+**Note:**
+The application uses **localStorage** to manage session data.
+If you wish to test multiple users simultaneously (e.g., admin and regular user), make sure to open two separate browser windows or use different browsers.
+Running both users in tabs of the same window will cause them to share the same session and behave as one user.
+
 ## 👥 Author
 
 Shaked Bardea
